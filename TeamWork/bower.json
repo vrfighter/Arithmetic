@@ -1,0 +1,8 @@
+{
+  "name": "Calculation",
+  "private": "true",
+  "devDependencies": {
+    "amazeui": "2.4.2",
+    "datatables": "1.10.9"
+  }
+}
