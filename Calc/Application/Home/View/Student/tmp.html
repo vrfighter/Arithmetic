@@ -1,0 +1,158 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>小学生四则运算网</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <js href="__PUBLIC__/assets/js/jquery.min.js"/>
+    <css href="__PUBLIC__/assets/css/amazeui.min.css"/>
+    <css href="__PUBLIC__/assets/css/dataTables.bootstrap.css"/>
+    <!-- <css href="__PUBLIC__/assets/css/amazeui.flat.min.css"/> -->
+    <js href="__PUBLIC__/assets/js/amazeui.min.js"/>
+    <js href="__PUBLIC__/assets/js/jquery.dataTables.min.js"/>
+    <js href="__PUBLIC__/assets/js/dataTables.bootstrap.js" />
+    <js href="__PUBLIC__/assets/js/echarts-all.js"/>
+
+    <style type="text/css">
+        .am-topbar-btn a {
+            color: #fff;
+        }
+        .am-topbar-btn a:hover {
+            color: #fff;
+        }
+        .am-topbar-btn a:active {
+            color: #fff;
+        }
+        .am-topbar-btn a:link {
+            color: #fff;
+        }
+    </style>
+
+    <script>
+        baseUrl = '__ROOT__';
+        $.ajax({
+            url: '{:U("Home/Student/getLetterNum/")}',
+            type: 'post',
+            dataType: 'json'
+        })
+        .success(function (data) {
+            $('#letter_num').html(data.num);
+        });
+
+    </script>
+</head>
+
+<body id="blog">
+
+<header class="am-g am-g-fixed blog-fixed blog-text-center blog-header">
+    <div class="am-u-sm-8 am-u-sm-centered">
+        <span>
+            <img width="100" src="__PUBLIC__/assets/i/stu/stulogo.jpg" alt="Logo"/>
+            <h2 class="am-hide-sm-only">在这里，小朋友们都能轻松进步^_^</h2>
+        </span>
+    </div>
+</header>
+<hr>
+<!-- nav start -->
+<nav class="am-g am-g-fixed blog-fixed blog-nav">
+<button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only blog-button" data-am-collapse="{target: '#blog-collapse'}" ><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+
+  <div class="am-collapse am-topbar-collapse" id="blog-collapse">
+    <ul class="am-nav am-nav-pills am-topbar-nav">
+      <li class="am-active"><a href="{:U("Home/Student/index")}">主页</a></li>
+      <li><a href="{:U("Home/Student/questionList")}">试题列表</a></li>
+      <li class="am-dropdown" data-am-dropdown>
+        <a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
+          我的考试 <span class="am-icon-caret-down"></span>
+        </a>
+        <ul class="am-dropdown-content">
+            <li><a href="{:U("Home/Student/examList")}">已完成</a></li>
+            <li><a href="{:U("Home/Student/processingExam")}">进行中</a></li>
+        </ul>
+      </li>
+      <if condition="session('student')">
+          <li><a href="{:U("Home/Student/letter")}">我的消息 <span id="letter_num" class="am-badge am-badge-warning"></span></a></li>
+          <else />
+      </if>
+    </ul>
+      <if condition="session('student')">
+          <div class="am-topbar-right">
+              <button id="logout-btn" class="am-btn am-btn-secondary am-topbar-btn am-btn-sm">
+                  <span class="am-icon-pencil"></span>
+                  <a href="{:U("/Home/Student/doLogout")}"> 注销</a>
+              </button>
+          </div>
+          <div class="am-topbar-right">
+              <button class="am-btn am-btn-secondary am-topbar-btn am-btn-sm">
+                  <span class="am-icon-user"></span>
+                  <a href="#"> {:I('session.student')['username']}</a>
+              </button>
+          </div>
+          <else />
+          <div class="am-topbar-right">
+              <button class="am-btn am-btn-secondary am-topbar-btn am-btn-sm">
+                  <span class="am-icon-user-plus"></span>
+                  <a href="{:U("/Home/Student/register")}"> 注册</a>
+              </button>
+          </div>
+          <div class="am-topbar-right">
+              <button class="am-btn am-btn-secondary am-topbar-btn am-btn-sm">
+                  <span class="am-icon-pencil"></span>
+                  <a href="{:U("/Home/Student/login")}"> 登录</a>
+              </button>
+          </div>
+      </if>
+  </div>
+</nav>
+<hr>
+<!-- nav end -->
+<!-- banner start -->
+<div class="am-g am-g-fixed blog-fixed am-u-sm-centered blog-article-margin">
+    <div data-am-widget="slider" class="am-slider am-slider-b1" data-am-slider='{&quot;controlNav&quot;:false}' >
+    <ul class="am-slides">
+      <li>
+            <img src="__PUBLIC__/assets/i/stu/1.jpg" alt="tab1">
+            <div class="blog-slider-desc am-slider-desc ">
+                <div class="blog-text-center blog-slider-con">
+                    <span><a href="" class="blog-color">Article &nbsp;</a></span>               
+                    <h1 class="blog-h-margin"><a href="">总在思考一句积极的话</a></h1>
+                    <p>那时候刚好下着雨，柏油路面湿冷冷的，还闪烁着青、黄、红颜色的灯火。
+                    </p>
+                    <span class="blog-bor">2015/10/9</span>
+                    <br><br><br><br><br><br><br>                
+                </div>
+            </div>
+      </li>
+      <li>
+          <img src="__PUBLIC__/assets/i/stu/2.jpg" alt="tab2">
+            <div class="am-slider-desc blog-slider-desc">
+                <div class="blog-text-center blog-slider-con">
+                    <span><a href="" class="blog-color">Article &nbsp;</a></span>               
+                    <h1 class="blog-h-margin"><a href="">总在思考一句积极的话</a></h1>
+                    <p>那时候刚好下着雨，柏油路面湿冷冷的，还闪烁着青、黄、红颜色的灯火。
+                    </p>
+                    <span>2015/10/9</span>                
+                </div>
+            </div>
+      </li>
+      <li>
+          <img src="__PUBLIC__/assets/i/stu/3.jpg" alt="tab3">
+            <div class="am-slider-desc blog-slider-desc">
+                <div class="blog-text-center blog-slider-con">
+                    <span><a href="" class="blog-color">Article &nbsp;</a></span>               
+                    <h1 class="blog-h-margin"><a href="">总在思考一句积极的话</a></h1>
+                    <p>那时候刚好下着雨，柏油路面湿冷冷的，还闪烁着青、黄、红颜色的灯火。
+                    </p>
+                    <span>2015/10/9</span>                
+                </div>
+            </div>
+      </li>
+    </ul>
+    </div>
+</div>
+<include file="Index/footer"/>

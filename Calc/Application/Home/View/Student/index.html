@@ -1,0 +1,132 @@
+<include file="Student/studentheader"/>
+<style>
+    .am-topbar-btn {
+        background: #23ccfe;
+    }
+    .get {
+        background: #1ABC9C;
+        color: #fff;
+        text-align: center;
+        padding: 70px 0;
+    }
+
+    .get-title {
+        font-size: 200%;
+        border: 2px solid #fff;
+        padding: 30px;
+        display: inline-block;
+    }
+
+    .get-btn {
+        background: #fff;
+    }
+
+    .detail {
+        background: #fff;
+    }
+
+    .detail-h2 {
+        text-align: center;
+        font-size: 150%;
+        margin: 40px 0;
+    }
+
+    .detail-h3 {
+        color: #1ABC9C;
+    }
+
+    .detail-p {
+        color: #7f8c8d;
+    }
+
+    .detail-mb {
+        margin-bottom: 30px;
+    }
+</style>
+<div class="get">
+    <div class="am-g">
+        <div class="am-u-sm-12">
+            <h1 class="get-title">四则运算教学网站</h1>
+            <p>
+                更人性化的网站设计，更高的教学质量，欢迎您的使用
+            </p>
+        </div>
+    </div>
+</div>
+<br>
+<div class="detail">
+    <div class="am-g am-container">
+        <div class="am-u-sm-12">
+            <div class="am-g">
+                <div class="am-u-sm-3 am-u-md-6 am-u-sm-12 detail-mb">
+                    <h3 class="detail-h3">
+                        <i class="am-icon-user am-icon-sm"></i>  学生成绩监督
+                    </h3>
+                    <p class="detail-p">
+                        在线查看学生的基本信息以及历次考试成绩，便于分析学生对知识的掌握情况，从而因材施教
+                    </p>
+                </div>
+                <div class="am-u-sm-3 am-u-md-6 am-u-sm-12 detail-mb">
+                    <h3 class="detail-h3">
+                        <i class="am-icon-print am-icon-sm"></i>  试题信息管理
+                    </h3>
+                    <p class="detail-p">
+                        教学网站可以生成和存储大量的试题，教师可以方便的管理试题资料，为不同的学生使用不同的练习题
+                    </p>
+                </div>
+                <div class="am-u-sm-3 am-u-md-6 am-u-sm-12 detail-mb">
+                    <h3 class="detail-h3">
+                        <i class="am-icon-comments am-icon-sm"></i>  师生交流互动
+                    </h3>
+                    <p class="detail-p">
+                        系统设置了私信功能，老师和学生之间可以及时交流，良好的互动可以显著提高教学质量
+                    </p>
+                </div>
+                <div class="am-u-sm-3 am-u-md-6 am-u-sm-12 detail-mb">
+                    <h3 class="detail-h3">
+                        <i class="am-icon-tasks am-icon-sm"></i>  在线安排考试
+                    </h3>
+                    <p class="detail-p">
+                        教学网站提供了安排在线考试的功能，老师可以要求学生在指定的时间段完成试题，并自动计算和分析考试成绩
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var isTimeStop = false; // 终止前一个count
+
+    function countDown(selector, second) {
+        if (isTimeStop) {
+            return;
+        }
+        console.log(second);
+        // 如果秒数还是大于0，则表示倒计时还没结束
+        if (second >= 0) {
+            // 按钮置为不可点击状态
+            $(selector).attr("disabled", true);
+            // 按钮里的内容呈现倒计时状态
+            $(selector).html("等待" + second + '秒');
+            // 时间减一
+            second--;
+            // 一秒后重复执行
+            action = setTimeout(function() {
+                countDown(selector, second);
+            }, 1000);
+            // 否则，按钮重置为初始状态
+        } else {
+            isTimeStop = true;
+            // 按钮里的内容恢复初始状态
+            $(selector).html("获取");
+            // 按钮置未可点击状态
+            $(selector).attr("disabled", false);
+            if(action != null){
+                clearTimeout(action);
+                action = null;
+            }
+        }
+    }
+</script>
+<include file="Index/footer"/>
