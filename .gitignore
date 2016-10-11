@@ -1,6 +1,9 @@
 Runtime/
 Public/upload
 package/
+*.iws
+workspace.xml
+tasks.xml
 
 # Windows image file caches
 Thumbs.db
