@@ -1,0 +1,144 @@
+<include file="studentheader"/>
+<style>
+    .list-title {
+        text-align: center;
+        padding: 20px;
+    }
+
+    #questionList {
+        text-align: center;
+    }
+
+    th {
+        text-align: center;
+    }
+</style>
+
+<!--<if condition="session('student')">
+<else />
+    <script type="text/javascript">
+        window.location.href = '{:U("/Home/Student/login")}';
+    </script>
+</if>-->
+<body>
+<div class="list-title">
+    <h1>试题列表</h1>
+</div>
+<div id="question" class="am-container" style="text-align: center">
+    <div class="am-g am-u-sm-10 am-u-sm-centered">
+        <table id="questionList" class="table-striped table-bordered table-hover" cellspacing="0" width="100%">
+            <caption>试题列表</caption>
+            <thead>
+            <tr style="height: 40px">
+                <th>试题编号</th>
+                <th style="vertical-align: middle">试题名称</th>
+                <th>开始练习</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+<include file="Index/footer"/>
+</body>
+<script type="text/javascript">
+    $(document).ready(function ($) {
+        $("#questionList").hide();
+        $("#question").append("<div id='waiting'><img src='__PUBLIC__/assets/images/waiting.gif'></div>");
+        $.ajax({
+            url: '{:U("/Home/Student/getQuestionList")}',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                teacher_id: '{:I("session.student")["teacher_id"]}'
+            }
+        })
+                .done(function (response) {
+                    $("div#waiting").remove();
+                    $("#questionList").show();
+                    $('#questionList').DataTable({
+                        'dom': '<"top"f>rt<"bottom"lip><"clear">',
+                        "bProcessing": true,
+                        "bDestroy": true,
+                        "bSort": true,
+                        "bAutoWidth": true,//自动宽度
+                        "ordering": true,
+                        "sPaginationType": "full_numbers",
+                        /*"aLengthMenu": [1, 2, 3],*/
+                        "oLanguage": {
+                            "sLengthMenu": "每页显示 _MENU_ 条记录",
+                            "sZeroRecords": "抱歉， 没有找到",
+                            "sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+                            "sInfoEmpty": "没有数据",
+                            "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+                            "sZeroRecords": "没有检索到数据",
+                            "sSearch": "搜索: &nbsp",
+                            "oPaginate": {
+                                "sFirst": "首页",
+                                "sPrevious": "上页",
+                                "sNext": "下页",
+                                "sLast": "尾页"
+                            }
+                        },
+
+                        data: response,
+                        columns: [
+                            {"data": 'question_id'},
+                            {"data": 'name'},
+                            {"data": 'question_content'}
+                        ],
+                        columnDefs: [
+                            <!-- { -->
+                            <!--     "targets": 0, -->
+                            <!--     "visible":false -->
+                            <!-- }, -->
+                            {
+                                "targets": -1,
+                                "data": null,
+                                "render": function (data, type, row, table) {
+                                    return '<a class="btn btn-info btn-primary" href="{:U("/Home/Student/doExercise/question_id/' + data + '")}">' + "去做练习" + '</a>';
+                                }
+                            }
+                        ]
+                    });
+                })
+                .fail(function () {
+                    console.log("error");
+                })
+                .always(function () {
+                    console.log("complete");
+                });
+    });
+
+    function showQuestionContent(data) {
+
+        $.ajax({
+            url: '{:U("/Home/Teacher/getQuestionContent")}',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                question_id: data
+            }
+        })
+                .success(function (response) {
+                    <!-- var content = JSON.parse(response); -->
+                    console.log(response);
+                    $('#questionContentTable').DataTable({
+                        bDestroy: true,
+                        paging: false,
+                        searching: false,
+                        data: response,
+                        columns: [
+                            {data: 'text'},
+                            {data: 'answer'}
+                        ]
+                    });
+                    $("#my-modal").modal('open');
+                })
+                .fail(function () {
+                    console.log("error");
+                })
+                .always(function () {
+                    console.log("complete");
+                });
+    }
+</script>
