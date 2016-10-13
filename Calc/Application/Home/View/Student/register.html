@@ -21,7 +21,7 @@
 <div class="am-g">
     <div class="am-u-sm-6 am-u-md-8 am-u-sm-centered">
         <hr>
-        <img width="100" src="__PUBLIC__/assets/images/stu/welcome1.jpg" alt="Logo" style="float: left;width: 20%;padding-top: 100px"/>
+        <img width="100" src="__PUBLIC__/assets/images/stu/welcome1.jpg" alt="Logo" style="float: left;width: 20%;padding-bottom: 50px"/>
         <form class="am-form" style="float: left;width: 60%">
             <h2 style="text-align: center">欢迎你小朋友</h2>
             <label>姓名</label>
@@ -32,6 +32,42 @@
             <input type="password" name="password" id="password">
             <label>确认密码</label>
             <input type="password" name="confirm-password" id="confirm-password">
+            <!--<label>性别</label>-->
+            <!--男：-->
+            <!--<input type="radio" checked="checked" name="sex" value="男" />-->
+            <!--<br />-->
+            <!--女：-->
+            <!--<input type="radio" name="Sex" value="女" />-->
+            <div class="form-group">
+                <label class="col-sm-2 control-label" style="vertical-align: middle">性别</label>
+                <div class="col-sm-10" style="text-align: center">
+                    <label class="radio-inline">
+                        <input type="radio" name="sex" value="男"> 男&nbsp&nbsp&nbsp&nbsp&nbsp
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="sex" value="女"> 女
+                    </label></div>
+            </div>
+            <div class="form-group">
+                <label for="school" class="col-sm-2 control-label" style="vertical-align: middle">学校</label>
+                <div class="col-sm-10"><input type="text" name="school" id="school" class="form-control"></div>
+            </div>
+            <div class="form-group">
+                <label for="grade" class="col-sm-2 control-label" style="vertical-align: middle">年级</label>
+                <div class="col-sm-10">
+                    <select id="grade" class="form-control">
+                        <option value="1">一年级</option>
+                        <option value="2">二年级</option>
+                        <option value="3">三年级</option>
+                        <option value="4">四年级</option>
+                        <option value="5">五年级</option>
+                        <option value="6">六年级</option>
+                    </select></div>
+            </div>
+            <div class="form-group">
+                <label for="phone" class="col-sm-2 control-label" style="vertical-align: middle">电话号</label>
+                <div class="col-sm-10"><input type="text" name="phone" id="phone" class="form-control"></div>
+            </div>
             <div class="am-form-group">
                 <label for="teacher-select">选择老师</label>
                 <select id="teacher-select">
@@ -40,7 +76,7 @@
             </div>
             <br>
         </form>
-        <img width="100" src="__PUBLIC__/assets/images/stu/welcome2.jpg" alt="Logo" style="float: left;width: 20%;padding-top: 100px"/>
+        <img width="100" src="__PUBLIC__/assets/images/stu/welcome2.jpg" alt="Logo" style="float: left;width: 20%;padding-bottom: 50px"/>
         <button name="register-btn" id="register-btn" class="am-btn am-btn-primary am-u-sm-centered">确认注册</button>
         <hr>
     </div>
@@ -70,6 +106,10 @@
             var teacher_id = $("#teacher-select").val();
             var password = $("#password").val();
             var confirm_password = $("#confirm-password").val();
+            var grade = $("#grade").val();
+            var sex = $('input[name="sex"]:checked').val();
+            var school = $("#school").val();
+            var phone = $("#phone").val();
             if (name == '' || username == '' || password == '') {
                 return;
             } else if (confirm_password != password){
@@ -84,7 +124,11 @@
                     name: name,
                     username: username,
                     password: password,
-                    teacher_id: teacher_id
+                    teacher_id: teacher_id,
+                    grade: grade,
+                    sex: sex,
+                    school: school,
+                    phone: phone
                 }
             })
                     .done(function(response) {
