@@ -40,8 +40,8 @@
 <include file="Index/footer"/>
 <script type="text/javascript">
     $(document).ready(function ($) {
-        $("#questionList").hide();
-        $("#question").append("<div id='waiting'><img src='__PUBLIC__/assets/images/waiting.gif'></div>");
+        /*$("#questionList").hide();
+        $("#question").append("<div id='waiting'><img src='__PUBLIC__/assets/images/waiting.gif'></div>");*/
         $.ajax({
             url: '{:U("/Home/Student/getQuestionList")}',
             type: 'POST',
@@ -51,8 +51,8 @@
             }
         })
                 .done(function (response) {
-                    $("div#waiting").remove();
-                    $("#questionList").show();
+                  /*  $("div#waiting").remove();
+                    $("#questionList").show();*/
                     $('#questionList').DataTable({
                         'dom': '<"top"f>rt<"bottom"lip><"clear">',
                         "bProcessing": true,
@@ -94,7 +94,7 @@
                                 "targets": -1,
                                 "data": null,
                                 "render": function (data, type, row, table) {
-                                    return '<a class="btn btn-info btn-primary" href="{:U("/Home/Student/doExercise/question_id/' + data + '")}">' + "去做练习" + '</a>';
+                                    return '<a class="btn btn-info btn-primary" href="{:U("/Home/Student/doExercise/question_id/' + row['question_id'] + '/name/'+row['name']+'")}">' + "去做练习" + '</a>';
                                 }
                             }
                         ]
@@ -107,37 +107,4 @@
                     console.log("complete");
                 });
     });
-
-    function showQuestionContent(data) {
-
-        $.ajax({
-            url: '{:U("/Home/Teacher/getQuestionContent")}',
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                question_id: data
-            }
-        })
-                .success(function (response) {
-                    <!-- var content = JSON.parse(response); -->
-                    console.log(response);
-                    $('#questionContentTable').DataTable({
-                        bDestroy: true,
-                        paging: false,
-                        searching: false,
-                        data: response,
-                        columns: [
-                            {data: 'text'},
-                            {data: 'answer'}
-                        ]
-                    });
-                    $("#my-modal").modal('open');
-                })
-                .fail(function () {
-                    console.log("error");
-                })
-                .always(function () {
-                    console.log("complete");
-                });
-    }
 </script>
