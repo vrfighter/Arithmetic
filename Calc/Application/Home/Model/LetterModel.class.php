@@ -1,4 +1,5 @@
 <?php
+<<<<<<< 7b1fdc9cd26586105c139b1ee1d3ade5f9b78487
 /**
  * Created by PhpStorm.
  * User: bwju
@@ -12,7 +13,6 @@ class LetterModel extends RelationModel
 {
     protected $tableName = "letter";
 
-    protected $_link = array(
         'teacher' => array(
             'mapping_type' => self::BELONGS_TO,
             'mapping_name' => 'teacher',
