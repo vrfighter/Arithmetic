@@ -24,6 +24,35 @@ class StudentController extends Controller {
         echo json_encode($data);
     }
 
+    /**
+     * 获取个人信息
+     */
+    public function getStudentInfo(){
+        $student_id = I('param.student_id');
+        $Dao = M('student');
+        $result = $Dao->find($student_id);
+        echo json_encode($result);
+    }
+
+    /**
+     * 修改个人信息
+     */
+    public function updateStuInfo(){
+        $data = I('param.');
+        $stuId = session('student')['student_id'];
+        $Dao = M('student');
+        $res = $Dao->where("student_id=$stuId")->save($data); // 根据条件更新记录
+        if($res===false){
+            $response['message'] = 'update error';
+            $response['status'] = 'false';
+            echo json_encode($response);
+        }
+        else{
+            $response['message'] = 'update success';
+            $response['status'] = 'success';
+            echo json_encode($response);
+        }
+    }
     public function getQuestionContent(){
         $question_id = I('param.question_id');
         $Dao = M('question');
@@ -112,7 +141,6 @@ class StudentController extends Controller {
         if(!$data['username'] || !$data['pwd']){
             $result['status'] = 'miss info';
             $result['message'] = '缺少有效信息';
-
             echo json_encode($result);
             exit;
         }
@@ -124,14 +152,12 @@ class StudentController extends Controller {
 
         if($r){
             session('student', $r);
-
             $result['status'] = 'success';
             $result['message'] = '登录成功';
         } else {
             $result['status'] = 'fail';
             $result['message'] = '登录失败';
         }
-
         echo json_encode($result);
     }
 

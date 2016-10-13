@@ -16,8 +16,13 @@
         background-image: linear-gradient(to right, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
     }
 </style>
+<if condition="session('student')">
+    <else/>
+    <script type="text/javascript">
+        window.location.href = '{:U("/Home/Student/login")}';
+    </script>
+</if>
 <div class="container">
-
     <div class="row">
         <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
             <form id="studentInfo" role="form" class="form-horizontal">
@@ -29,9 +34,13 @@
                                                   readonly></div>
                 </div>
                 <div class="form-group">
-                    <label for="password" class="col-sm-2 control-label" style="vertical-align: middle">密码</label>
-                    <div class="col-sm-10"><input type="text" name="password" id="password" class="form-control"
+                    <label for="pwd" class="col-sm-2 control-label" style="vertical-align: middle">密码</label>
+                    <div class="col-sm-10"><input type="text" name="pwd" id="pwd" class="form-control"
                                                   required="true"></div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-2 control-label" style="vertical-align: middle">姓名</label>
+                    <div class="col-sm-10"><input type="text" name="name" id="name" class="form-control" required></div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label" style="vertical-align: middle">性别</label>
@@ -48,29 +57,123 @@
                     <div class="col-sm-10"><input type="text" name="school" id="school" class="form-control"></div>
                 </div>
                 <div class="form-group">
+                    <label for="grade" class="col-sm-2 control-label" style="vertical-align: middle">年级</label>
+                    <div class="col-sm-10">
+                        <select id="grade" class="form-control">
+                            <option value="1">一年级</option>
+                            <option value="2">二年级</option>
+                            <option value="3">三年级</option>
+                            <option value="4">四年级</option>
+                            <option value="5">五年级</option>
+                            <option value="6">六年级</option>
+                        </select></div>
+                </div>
+                <div class="form-group">
                     <label for="phone" class="col-sm-2 control-label" style="vertical-align: middle">电话号</label>
-                    <div class="col-sm-10"><input type="text" name="school" id="phone" class="form-control"></div>
+                    <div class="col-sm-10"><input type="text" name="phone" id="phone" class="form-control"></div>
                 </div>
                 <div class="form-group">
                     <label for="teacher" class="col-sm-2 control-label" style="vertical-align: middle">老师</label>
                     <div class="col-sm-10">
                         <select id="teacher" class="form-control">
-                            <option>邓琨</option>
-                            <option>白文俊</option>
+
                         </select></div>
                 </div>
                 <hr class="colorgraph">
                 <div class="row">
                     <div class="col-xs-6 col-md-6">
-                        <input type="submit" id="submitButton" value="修改" class="btn btn-success btn-block"></div>
-                    <div class="col-xs-6 col-md-6"><a href="#" class="btn btn-primary btn-block">取消</a></div>
+                        <a href="#" id="submitButton" class="btn btn-success btn-block" onclick="saveInfo()">修改</a>
+                    </div>
+                    <div class="col-xs-6 col-md-6"><a href="#" class="btn btn-primary btn-block" onclick="can()">取消</a>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    $(document).ready(function () {
-    });
 
+<script type="text/javascript">
+    $(document).ready(function ($) {
+        $.ajax({
+            url: '{:U("/Home/Student/getTeacherInfo")}',
+            type: 'POST',
+            dataType: 'json'
+        })
+                .done(function (response) {
+                    response.map(function (r) {
+                        var option = '<option value="' + r.teacher_id + '">' + '编号' + r.teacher_id + '  ' + '姓名 ' + r.name + '</option>';
+                        $('#teacher').append(option);
+                    });
+                })
+                .fail(function () {
+                    console.log("error");
+                })
+                .always(function () {
+                    console.log("complete");
+                });
+        $.ajax({
+            url: '{:U("/Home/Student/getStudentInfo")}',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                student_id: '{:I("session.student")["student_id"]}'
+            }
+        })
+                .done(function (response) {
+                    $('#username').val(response['username']);
+                    $('#pwd').val(response['pwd']);
+                    $('#name').val(response['name']);
+                    var sex = response['sex'];
+                    $("input[name='sex'][value='" + sex + "']").attr("checked", 'checked');
+                    $('#school').val(response['school']);
+                    $("#grade").val(response['grade']);
+                    $('#phone').val(response['phone']);
+                    $('#teacher').val(response['teacher_id']);
+
+                })
+                .fail(function () {
+                    console.log("error");
+                })
+                .always(function () {
+                    console.log("complete");
+                });
+    });
+    function saveInfo() {
+        var name = $("#name").val();
+        var pwd = $("#pwd").val();
+        var grade = $("#grade").val();
+        var sex = $('input[name="sex"]:checked').val();
+        var school = $("#school").val();
+        var phone = $("#phone").val();
+        var teacherId = $("#teacher").val();
+        $.ajax({
+            url: '{:U("/Home/Student/updateStuInfo")}',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                name: name,
+                pwd: pwd,
+                grade: grade,
+                sex: sex,
+                school: school,
+                phone: phone,
+                teacher_id: teacherId
+            }
+        })
+                .done(function (response) {
+                    console.log("ajax success");
+                    if (response.status == 'success') {
+                        alert("修改成功");
+                        window.location.href = '{:U("/Home/Student/index")}';
+                    } else {
+                        alert(response.message);
+                    }
+                })
+                .fail(function () {
+                    console.log("error");
+                })
+                .always(function () {
+                    console.log("complete");
+                });
+    }
 </script>
