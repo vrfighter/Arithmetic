@@ -96,6 +96,10 @@
                                 "render": function (data, type, row, table) {
                                     return '<a class="btn btn-info btn-primary" href="{:U("/Home/Student/doExercise/question_id/' + row['question_id'] + '/name/'+row['name']+'")}">' + "去做练习" + '</a>';
                                 }
+                            },
+                            {
+                                "targets": 2,
+                                orderable: false,//禁用排序
                             }
                         ]
                     });
