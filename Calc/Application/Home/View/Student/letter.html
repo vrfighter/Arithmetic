@@ -1,0 +1,156 @@
+<include file="Student/studentheader"/>
+<style>
+    .list-title {
+      text-align: center;
+      padding: 0px;
+    }
+    #letterList {
+      text-align: center;
+    }
+    th {
+      text-align: center;
+    }
+</style>
+
+<if condition="session('student')">
+<else />
+    <script type="text/javascript">
+        window.location.href = '{:U("/Home/Student/login")}';
+    </script>
+</if>
+    <div class="list-title">
+        <h1>通知列表</h1>
+    </div>
+    <div class="am-container" style="text-align: center">
+        <img src="__PUBLIC__/assets/images/stu/letter.jpg" alt="Logo" style="float: left;width: 10%;"/>
+        <div class="am-g am-u-sm-10 am-u-sm-centered" style="float: left;width: 90%">
+            <table id="letterList" class="table-striped table-bordered table-hover" cellspacing="0" style="width: 100%">
+                <thead>
+                    <tr style="height: 40px">
+                        <th style="width: 10%">编号</th>
+                        <th style="width: 15%">老师</th>
+                        <th style="width: 40%">通知详情</th>
+                        <th style="width: 10%">状态</th>
+                        <th style="width: 25%">操作</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+<include file="Index/footer"/>
+
+<script type="text/javascript">
+    $(document).ready(function($) {
+        $.ajax({
+            url: '{:U("/Home/Student/getLetter")}',
+            type: 'POST',
+            dataType: 'json'
+        })
+            .done(function(response) {
+                $('#letterList').DataTable( {
+                    "bProcessing": true,
+                    "bDestroy": true,
+                    "bFilter":false,
+                    "sPaginationType" : "full_numbers",
+                    "oLanguage" : {
+                          "sLengthMenu": "每页显示 _MENU_ 条记录",
+                          "sZeroRecords": "抱歉， 没有找到",
+                          "sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+                          "sInfoEmpty": "没有数据",
+                          "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+                          "sZeroRecords": "没有检索到数据",
+                           "sSearch": "搜索: &nbsp",
+                          "oPaginate": {
+                            "sFirst": "首页",
+                            "sPrevious": "前一页",
+                            "sNext": "后一页",
+                            "sLast": "尾页"
+                          }
+                      },
+                    data: response,
+                    columns: [
+                        { data: 'id' },
+                        { data: 'teacher' },
+                        { data: 'content' },
+                        { data: 'status' },
+                        { data: 'btn' },
+                    ],
+                    columnDefs: [
+                        {
+                            "targets": 0,
+                            "render": function (data, type, row, table) {
+                                return table.row + 1;
+                            }
+                        },
+                         {
+                            "targets": 1,
+                            "render": function (data, type, row, table) {
+                                return data.name;
+                            }
+                        },
+                         {
+                            "targets": 3,
+                            "render": function (data, type, row, table) {
+                                return data == '0'? '未读':'已读';
+                            }
+                        },
+                        {
+                            "targets": 4,
+                            orderable: false,//禁用排序
+                            "data": null,
+                            "render": function (data, type, row, table) {
+                                if(row.status == '0'){
+                                    return '<button type="button" class="am-btn am-btn-sm am-btn-success" onclick="modStatus(' + row.letter_id + ',\'1\')">' +  "已读" + '</button>  <button type="button" class="am-btn am-btn-sm am-btn-danger" onclick="del(' + row.letter_id + ')">删除</button>';
+                                }else{
+                                    return '<button type="button" class="am-btn am-btn-sm am-btn-success" onclick="modStatus(' + row.letter_id + ',\'0\')">' +  "置为未读" + '</button>  <button type="button" class="am-btn am-btn-sm am-btn-danger" onclick="del(' + row.letter_id + ')">删除</button>';
+                                }
+
+                            }
+                        }
+                    ]
+                });
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
+            });
+    });
+
+    function modStatus(letter_id, status){
+        $.ajax({
+            url: '{:U("/Home/Student/updateLetter")}',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                letter_id: letter_id,
+                status   : status
+            }
+        })
+            .success(function(response){
+                location.reload();
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
+            });
+    }
+
+    function del(letter_id){
+        $.ajax({
+            url: '{:U("/Home/Student/deleteLetter")}',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                letter_id: letter_id
+            }
+        })
+        .success(function(response){
+            location.reload();
+        })
+    }
+</script>

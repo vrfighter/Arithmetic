@@ -201,12 +201,20 @@ class StudentController extends Controller {
         $username = I('param.username');
         $password= I('param.password');
         $teacher_id = I('param.teacher_id');
+        $phone = I('param.phone');
+        $sex = I('param.sex');
+        $grade = I('param.grade');
+        $school = I('param.school');
 
         $Dao = M('student');
         $result['name'] = $name;
         $result['username'] = $username;
         $result['pwd']= $password;
         $result['teacher_id'] = $teacher_id;
+        $result['phone'] = $phone;
+        $result['sex'] = $sex;
+        $result['grade'] = $grade;
+        $result['school'] = $school;
         $id = $Dao->add($result);
 
         $response['message'] = 'register success';
