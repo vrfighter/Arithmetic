@@ -1,0 +1,160 @@
+<include file="Student/studentheader"/>
+<js href="__PUBLIC__/assets/js/react.js"/>
+<js href="__PUBLIC__/assets/js/react-dom.js"/>
+<js href="__PUBLIC__/assets/js/browser.js"/>
+<style>
+    h2,table,tr {
+        text-align: center;
+    }
+</style>
+<br/>
+<div class="am-container">
+    <div class="am-panel am-panel-primary">
+        <div id="examList">
+        </div>
+        <!-- <table class="am-table"> -->
+        <!--     <tbody ></tbody> -->
+        <!-- </table> -->
+        <div class="am-panel-footer">
+            聪明出于勤奋，天才在于积累 －－华罗庚
+        </div>
+    </div>
+</div>
+<div class="am-modal am-modal-no-btn" tabindex="-1" id="my-modal">
+    <div class="am-modal-dialog">
+        <div class="am-modal-hd">成绩
+           <!-- <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>-->
+        </div>
+        <div class="am-modal-bd" id="score-content">
+
+        </div>
+    </div>
+</div>
+
+<include file="Index/footer"/>
+
+<script type="text/babel">
+    $('#my-modal').modal({closeViaDimmer: false });
+    $('#my-modal').modal('close');
+    var ExamItem = React.createClass({
+        getInitialState: function() {
+            return {answer: this.props.answer, score: 0,sumed: false};
+        },
+        finishQuestion: function(event) {
+            if(event.target.value == this.state.answer){
+                this.setState({score: 1});
+            }
+        },
+        setSum: function() {
+            if(!this.state.sumed) {
+                this.props.callbackParent(this.state.score);
+                if(this.state.score == 1) {
+                    this.setState({sumed: true});
+                }
+            }
+        },
+        render: function() {
+            return (
+                    <tr className="">
+                        <td>{this.props.text}</td>
+                        <td>
+                            <input type="text" onChange={this.finishQuestion} onBlur={this.setSum}/>
+                        </td>
+                    </tr>
+            );
+        }
+    });
+
+    var ExamTable = React.createClass({
+        getInitialState: function() {
+            return {data: [], question_id: this.props.question_id, time_left: this.props.spend_time, sum: 0, second: 0};
+        },
+        loadQuestionData: function() {
+            $.ajax({
+                url: '{:U("/Home/Student/getQuestionContent")}',
+                dataType: 'json',
+                type: 'POST',
+                data: {
+                    question_id: this.state.question_id
+                },
+                success: function(response) {
+                    this.setState({data: response});
+                }.bind(this),
+                error: function(xhr, status, err) {
+                    console.error(status, err.toString());
+                }.bind(this)
+            });
+            var time_second = Date.parse(new Date()) / 1000;
+            this.setState({second: time_second});
+        },
+        onChildChanged: function(score) {
+            this.setState({sum: this.state.sum + score});
+        },
+        componentDidMount: function() {
+            this.loadQuestionData();
+            this.timer = setInterval(function () {
+                var t = this.state.time_left - 1;
+                this.setState({time_left: t});
+            }.bind(this), 1000);
+        },
+        submitExam: function() {
+            var student_id = "{:I('session.student')['student_id']}";
+            var exam_id = "{:I('param.exam_id')}";
+            var score = parseFloat(this.state.sum) / parseFloat(this.state.data.length) * 100;
+            var spend_time = Date.parse(new Date()) / 1000 - this.state.second;
+            $("#score-content").text(score);
+            $("#my-modal").modal("open");
+
+            window.setInterval(function(){
+//ajax 请求后台数据
+                $.ajax({
+                    url: '{:U("/Home/Student/submitExam")}',
+                    dataType: 'json',
+                    type: 'POST',
+                    data: {
+                        student_id: student_id,
+                        exam_id: exam_id,
+                        spend_time: spend_time,
+                        score: score
+                    },
+                    success: function(response) {
+                        console.log(response.message.toString());
+                        window.location.href='{:U("/Home/Student/examing")}';
+                    }.bind(this),
+                    error: function(xhr, status, err) {
+                        console.error(status, err.toString());
+                    }.bind(this)
+                });
+            },2000);
+
+        },
+        render: function() {
+            var childChangeFunc = this.onChildChanged;
+            if(this.state.time_left <= 0){
+                this.submitExam();
+                setInterval(function(){
+                    window.location.href = '{:U("/Home/Student/index")}';
+                },2000);
+            }
+            return (
+                    <div>
+                        <h3 className="am-panel-title" style={{textAlign: 'center',padding: '10px 0'}}>考试剩余时间{this.state.time_left}秒</h3>
+                        <table className="am-table">
+                            <tbody>
+                            {this.state.data.map(function(d,i){
+                                return <ExamItem key={i} text={d.text} answer={d.answer} callbackParent={childChangeFunc}/>
+                            })}
+                            </tbody>
+                        </table>
+                        <button className="am-btn am-btm-success am-u-centered" onClick={this.submitExam}>交卷</button>
+                    </div>
+            );
+        }
+
+    });
+
+    ReactDOM.render(
+            <ExamTable question_id ="{:I('param.question_id')}" spend_time="{:I('param.spend_time')}"/>,
+            document.getElementById('examList')
+    );
+</script>
