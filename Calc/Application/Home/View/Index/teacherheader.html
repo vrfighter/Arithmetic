@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>四则运算</title>
+    <!-- Bootstrap -->
+    <js href="__PUBLIC__/assets/js/jquery.min.js"/>
+    <css href="__PUBLIC__/assets/css/amazeui.min.css"/>
+    <css href="__PUBLIC__/assets/css/dataTables.bootstrap.css"/>
+    <css href="__PUBLIC__/assets/css/bootstrap.min.css"/>
+    <css href="__PUBLIC__/assets/css/layoutit.css"/>
+    <css href="__PUBLIC__/assets/css/bootstrap-combined.min.css"/>
+    <!-- <css href="__PUBLIC__/assets/css/amazeui.flat.min.css"/> -->
+    <js href="__PUBLIC__/assets/js/bootstrap.min.js"/>
+    <js href="__PUBLIC__/assets/js/amazeui.min.js"/>
+    <js href="__PUBLIC__/assets/js/jquery.dataTables.min.js"/>
+    <js href="__PUBLIC__/assets/js/dataTables.bootstrap.js"/>
+    <js href="__PUBLIC__/assets/js/echarts-all.js"/>
+
+    <style type="text/css">
+        header {
+            text-align: center;
+        }
+
+        .am-topbar-btn a {
+            color: #fff;
+        }
+
+        .am-topbar-btn a:hover {
+            color: #fff;
+        }
+
+        .am-topbar-btn a:active {
+            color: #fff;
+        }
+
+        .am-topbar-btn a:link {
+            color: #fff;
+        }
+    </style>
+
+    <script>
+        baseUrl = '__ROOT__';
+    </script>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <br/>
+            <div class="row-fluid">
+
+                <div class="span8 ">
+
+                    <header class="am-topbar">
+                        <div class="am-container">
+                            <div class="am-collapse am-topbar-collapse" id="doc-topbar-collapse">
+                                <ul class="am-nav am-nav-pills am-topbar-nav">
+
+                                    <h1 class="am-topbar-brand">
+                                        四则运算教学网站
+                                    </h1>
+
+                                    <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only"
+                                            data-am-collapse="{target: '#doc-topbar-collapse'}"><span
+                                            class="am-sr-only"></span> <span class="am-icon-bars"></span></button>
+                                    <li class="am-active"><a href="{:U("Home/Teacher/index")}">首页</a></li>
+                                    <li><a href="{:U("Home/Teacher/studentList")}">学生信息</a></li>
+                                    <li class="am-dropdown" data-am-dropdown>
+                                        <a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
+                                            习题 <span class="am-icon-caret-down"></span>
+                                        </a>
+                                        <ul class="am-dropdown-content">
+                                            <li><a href="{:U("Home/Teacher/questionList")}">习题列表</a></li>
+                                            <li><a href="{:U("Home/Teacher/addQuestion")}">在线出题</a></li>
+                                            <li><a href="{:U("Home/Teacher/fileQuestion")}">导入习题</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="am-dropdown" data-am-dropdown>
+                                        <a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
+                                            考试 <span class="am-icon-caret-down"></span>
+                                        </a>
+                                        <ul class="am-dropdown-content">
+                                            <li><a href="{:U("Home/Teacher/examList")}">已完成</a></li>
+                                            <li><a href="{:U("Home/Teacher/processingExam")}">进行中</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </header>
+                </div>
+                <div class="span4">
+                    <div class="row-fluid">
+                        <if condition="session('teacher')">
+                            <div class="span6">
+                                <a class="btn btn-block btn-large btn-primary" type="button"
+                                        href="{:U("/Home/Teacher/doLogout")}">注销
+                                </a>
+                            </div>
+                            <div class="span6">
+                                <a class="btn btn-block btn-large btn-primary" type="button">
+                                    {:I('session.teacher')['username']}
+                                </a>
+                            </div>
+                            <else/>
+                            <div class="span6">
+                                <a class="btn btn-block btn-large btn-primary"
+                                   type="button" href="{:U("/Home/Teacher/register")}">注册
+                                </a>
+                            </div>
+                            <div class="span6">
+                                <a class="btn btn-block btn-large btn-primary"
+                                   type="button" href="{:U("/Home/Teacher/login")}">登录
+                                </a>
+                            </div>
+                        </if>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
