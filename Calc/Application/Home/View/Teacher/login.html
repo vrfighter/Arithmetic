@@ -1,0 +1,69 @@
+<include file="Index/header"/>
+<header class="am-g my-head">
+    <div class="am-u-sm-12 am-article">
+        <br>
+        <h1 class="am-article-title"><strong>教师登录</strong></h1>
+        <br>
+    </div>
+</header>
+<body>
+
+
+    <div class="am-g">
+        <div class="am-u-sm-6 am-u-md-8 am-u-sm-centered">
+            <hr>
+            <form class="form-horizontal">
+                <div class="control-group"><label class="control-label" contenteditable="false" for="username">用户名</label>
+                    <div class="controls"><br/><input  class="form-control" id="username"  name="username" placeholder="用户名" type="text" /></div>
+                </div>
+                <br/>
+                <div class="control-group"><label class="control-label" contenteditable="false" for="password">密码</label>
+                    <div class="controls"><br/><input class="form-control"  id="password" name="password" placeholder="密码" type="password" /></div>
+                </div>
+                <hr />
+                <div class="control-group">
+                    <div class="controls">
+                        <button name="login-btn" id="login-btn"  class="btn btn-primary" contenteditable="false" type="submit">登陆</button></div>
+                </div>
+            </form>
+            <hr>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function($) {
+            $("#login-btn").on('click', function(argument) {
+                console.log("clicked");
+                var username = $("#username").val();
+                var password = $("#password").val();
+                if (username == '' || password == '') {
+                    return;
+                }
+                $.ajax({
+                    url: '{:U("/Home/Teacher/checkLogin")}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        username: username,
+                        password: password
+                    }
+                })
+                    .done(function(response) {
+                        console.log("ajax success");
+                        if (response.status== 'success') {
+                            window.location.href = '{:U("/Home/Teacher/index")}';
+                        } else {
+                            alert(response.message);
+                        }
+                    })
+                    .fail(function() {
+                        console.log("error");
+                    })
+                    .always(function() {
+                        console.log("complete");
+                    });
+
+            });
+        });
+        </script>
+</body>
+<include file="Index/footer"/>

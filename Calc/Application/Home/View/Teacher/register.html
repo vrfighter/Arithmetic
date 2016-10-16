@@ -1,0 +1,84 @@
+<include file="Index/header"/>
+<style>
+    h1 {
+      padding: 40px 0;
+    }
+</style>
+<header class="am-g my-head">
+    <div class="am-u-sm-12 am-article">
+        <h1 class="am-article-title"><strong>教师注册</strong></h1>
+    </div>
+</header>
+<body>
+    <div class="am-g">
+        <div class="am-u-sm-6 am-u-sm-centered">
+            <hr>
+            <form class="form-horizontal">
+                <div class="control-group"><label class="control-label" contenteditable="false" for="name">姓名</label>
+                    <div class="controls"><br/><input class="form-control" id="name"  name="name" placeholder="姓名" type="text" /></div>
+                </div>
+                <br/>
+                <div class="control-group"><label class="control-label" contenteditable="false" for="username">用户名</label>
+                    <div class="controls"><br/><input class="form-control"  id="username" name="username" placeholder="用户名" type="text" /></div>
+                </div>
+                <br/>
+                <div class="control-group"><label class="control-label" contenteditable="false" for="password">密码</label>
+                    <div class="controls"><br/><input class="form-control"  id="password" name="password" placeholder="密码" type="password" /></div>
+                </div>
+                <br/>
+                <div class="control-group"><label class="control-label" contenteditable="false" for="password-confirm">确认密码</label>
+                    <div class="controls"><br/><input class="form-control"  id="password-confirm" name="password-confirm" placeholder="确认密码" type="password" /></div>
+                </div>
+                <hr />
+                <div class="control-group">
+                    <div class="controls">
+                        <button name="register-btn" id="register-btn"  class="btn btn-primary" contenteditable="false" type="submit">确认注册</button></div>
+                </div>
+            </form>
+            <hr>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function($) {
+            $("#register-btn").on('click', function(argument) {
+                var username = $("#username").val();
+                var password = $("#password").val();
+                var name = $("#name").val();
+                var password_confirm = $("#password-confirm").val();
+
+                if (name == '' || username == '' || password == '') {
+                    return;
+                } else if (password_confirm != password){
+                    alert('两次输入的密码不相同');
+                    return;
+                }
+                $.ajax({
+                    url: '{:U("/Home/Teacher/checkRegister")}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        username: username,
+                        password: password,
+                        name: name
+                    }
+                })
+                    .done(function(response) {
+                        console.log("ajax success");
+                        if (response.status== 'success') {
+                            window.location.href = '{:U("/Home/Teacher/login")}';
+                        } else {
+                            alert(response.message);
+                        }
+                    })
+                    .fail(function() {
+                        console.log("error");
+                    })
+                    .always(function() {
+                        console.log("complete");
+                    });
+
+            });
+        });
+        </script>
+</body>
+<include file="Index/footer"/>
