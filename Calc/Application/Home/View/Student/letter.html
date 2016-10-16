@@ -49,6 +49,7 @@
         })
             .done(function(response) {
                 $('#letterList').DataTable( {
+                    'dom': '<"top">rt<"bottom"lip><"clear">',
                     "bProcessing": true,
                     "bDestroy": true,
                     "bFilter":false,
@@ -63,8 +64,8 @@
                            "sSearch": "搜索: &nbsp",
                           "oPaginate": {
                             "sFirst": "首页",
-                            "sPrevious": "前一页",
-                            "sNext": "后一页",
+                            "sPrevious": "上页",
+                            "sNext": "下页",
                             "sLast": "尾页"
                           }
                       },
