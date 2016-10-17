@@ -1,0 +1,287 @@
+<include file="Index/teacherheader"/>
+<style>
+    .list-title {
+      text-align: center;
+      padding: 20px;
+    }
+    #studentList {
+      text-align: center;
+    }
+    th {
+      text-align: center;
+    }
+</style>
+
+    <if condition="session('teacher')">
+    <else />
+        <script type="text/javascript">
+            window.location.href = '{:U("/Home/Teacher/login")}';
+        </script>
+    </if>
+    <div class="list-title">
+        <h1>学生信息列表</h1>
+    </div>
+    <div class="am-container">
+        <div class="am-g am-u-sm-centered">
+            <table id="studentList" class="am-table am-table-bordered">
+                <thead>
+                    <tr>
+                        <th>学生学号</th>
+                        <th>学生姓名</th>
+                        <th>学生详情</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div class="am-modal am-modal-no-btn" tabindex="-1" id="my-modal">
+        <div class="am-modal-dialog">
+            <div class="am-modal-hd">学生历次考试成绩
+                <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+            </div>
+            <div class="am-modal-bd" id="studentInfoContent">
+                <table id="studentInfoTable" class="am-table am-table-bordered">
+                    <thead>
+                        <tr>
+                            <th>试题编号</th>
+                            <th>学生得分</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="am-modal am-modal-prompt" tabindex="-1" id="letter-modal">
+        <div class="am-modal-dialog">
+            <div class="am-modal-hd">通知</div>
+            <div class="am-modal-bd">
+                通知内容
+                <textarea id="content" class="am-modal-prompt-input"></textarea>
+            </div>
+            <div class="am-modal-footer">
+                <span class="am-modal-btn" onclick="submit()">确认</span>
+                <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="am-modal am-modal-no-btn" tabindex="-1" id="my-chart-modal">
+        <div class="am-modal-dialog">
+            <div class="am-modal-hd">学生各次考试得分情况
+                <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+            </div>
+            <div class="am-modal-bd" id="examInfoContent" style="height:350px;width:500px;"></div>
+        </div>
+    </div>
+<include file="Index/footer"/>
+
+<script type="text/javascript">
+    $(document).ready(function($) {
+
+        $.ajax({
+            url: '{:U("/Home/Teacher/getStudentList")}',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                teacher_id: '{:I("session.teacher")["teacher_id"]}'
+            }
+        })
+            .done(function(response) {
+                $('#studentList').DataTable( {
+                    "bProcessing": true,
+                    "bDestroy": true,
+                    "sPaginationType" : "full_numbers",
+                    "oLanguage" : {
+                          "sLengthMenu": "每页显示 _MENU_ 条记录",
+                          "sZeroRecords": "抱歉， 没有找到",
+                          "sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+                          "sInfoEmpty": "没有数据",
+                          "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+                          "sZeroRecords": "没有检索到数据",
+                           "sSearch": "搜索: &nbsp",
+                          "oPaginate": {
+                            "sFirst": "首页",
+                            "sPrevious": "前一页",
+                            "sNext": "后一页",
+                            "sLast": "尾页"
+                          }
+                      },
+                    data: response,
+                    columns: [
+                        { data: 'student_id' },
+                        { data: 'name' },
+                        { data: 'info' }
+                    ],
+                    columnDefs: [
+                        <!-- { -->
+                        <!--     "targets": 0, -->
+                        <!--     "visible":false -->
+                        <!-- }, -->
+                        {
+                            "targets": -1,
+                            "data": null,
+                            "render": function (data, type, row, table) {
+                                return '<button type="button" class="am-btn am-btn-primary" onclick="getStudentInfo(' + data + ')">' +  "查看学生" + '</button>  <button type="button" class="am-btn am-btn-secondary" onclick="getStudentChart(' + data + ')">' +  "统计图表" + '</button>  <button type="button" class="am-btn am-btn-success" onclick="letter(' + data + ')">' +  "通知" + '</button>';
+                            }
+                        }
+                    ]
+                } );
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
+            });
+    });
+
+    function getStudentInfo(student_id){
+        $.ajax({
+            url: '{:U("/Home/Teacher/getStudentInfo")}',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                student_id: student_id
+            }
+        })
+            .done(function(response){
+                $('#studentInfoTable').DataTable({
+                    "bProcessing": true,
+                    "bDestroy": true,
+                    "sPaginationType" : "full_numbers",
+                    "oLanguage" : {
+                          "sLengthMenu": "每页显示 _MENU_ 条记录",
+                          "sZeroRecords": "抱歉， 没有找到",
+                          "sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+                          "sInfoEmpty": "没有数据",
+                          "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+                          "sZeroRecords": "没有检索到数据",
+                           "sSearch": "搜索: &nbsp",
+                          "oPaginate": {
+                            "sFirst": "首页",
+                            "sPrevious": "前一页",
+                            "sNext": "后一页",
+                            "sLast": "尾页"
+                          }
+                      },
+        
+                    data: response,
+                    columns:[
+                        { data: 'exam_id' },
+                        { data: 'score' }
+                    ]
+                });
+                $("#my-modal").modal('open');
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
+            });
+    }
+
+    var myChart = echarts.init(document.getElementById('examInfoContent'));
+    function getStudentChart(student_id){
+        $.ajax({
+            url: '{:U("/Home/Teacher/getStudentInfo")}',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                student_id: student_id
+            }
+        })
+        .done(function(response){
+
+            var ydata = response.map(function(d) {
+                return parseInt(d.score);
+            });
+            console.log(ydata);
+            var xdata = response.map(function(d) {
+                return d.exam_id;
+            });
+            myChart.clear();
+            option = {
+                tooltip : {
+                    trigger: 'axis'
+                },
+                toolbox: {
+                    show : true,
+                    feature : {
+                        dataView : {show: true, readOnly: false},
+                        magicType : {show: true, type: ['line', 'bar']},
+                        restore : {show: true},
+                        saveAsImage : {show: true}
+                    }
+                },
+                calculable : true,
+                xAxis : [
+                    {
+                        type : 'category',
+                        boundaryGap : false,
+                        data : xdata
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}分'
+                        }
+                    }
+                ],
+                series : [
+                    {
+                        name:'分数',
+                        type:'line',
+                        data: ydata,
+                        markPoint : {
+                            data : [
+                                {type : 'max', name: '最高分'},
+                                {type : 'min', name: '最低分'}
+                            ]
+                        },
+                        markLine : {
+                            data : [
+                                {type : 'average', name: '平均分'}
+                            ]
+                        }   
+                    }
+                ]
+            };
+            myChart.setOption(option);
+            $("#my-chart-modal").modal({
+                relatedTarget: this
+            });
+        })
+        .fail(function() {
+            console.log("error");
+        })
+        .always(function() {
+            console.log("complete");
+        });
+    }
+
+    var student_id = "";
+    function letter(studentid){
+        student_id = studentid;
+        $("#letter-modal").modal('open');
+    }
+
+    function submit(){
+        $.ajax({
+            url: '{:U("/Home/Teacher/addLetter")}',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                student_id: student_id,
+                content:$('#content').val()
+            }
+        })
+        .done(function(data){
+            //$("#letter-modal").modal('close');
+            //location.reload();
+        })
+    }
+</script>
