@@ -1,0 +1,243 @@
+<include file="Index/teacherheader"/>
+<style>
+    .list-title {
+      text-align: center;
+      padding: 20px;
+    }
+    #examList {
+      text-align: center;
+    }
+    th {
+      text-align: center;
+    }
+</style>
+    <if condition="session('teacher')">
+    <else />
+        <script type="text/javascript">
+            window.location.href = '{:U("/Home/Teacher/login")}';
+        </script>
+    </if>
+    <div class="list-title">
+        <h1>考试信息</h1>
+    </div>
+    <div class="am-container">
+        <div class="am-g am-u-sm-centered">
+            <table id="examList" class="am-table am-table-bordered">
+            </table>
+        </div>
+    </div>
+    <div class="am-modal am-modal-no-btn" tabindex="-1" id="my-modal">
+        <div class="am-modal-dialog">
+            <div class="am-modal-hd">本次考试得分情况
+                <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+            </div>
+            <div class="am-modal-bd">
+                <table id="examInfoTable" class="am-table am-table-bordered">
+                    <thead>
+                        <tr>
+                            <th>学生编号</th>
+                            <th>学生姓名</th>
+                            <th>学生得分</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="am-modal am-modal-no-btn" tabindex="-1" id="my-chart-modal">
+        <div class="am-modal-dialog">
+            <div class="am-modal-hd">本次考试得分情况
+                <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+            </div>
+            <div class="am-u-sm-centered" id="examInfoContent" style="height:350px;width:500px;"></div>
+        </div>
+    </div>
+<include file="Index/footer"/>
+<script type="text/javascript">
+    $(document).ready(function($) {
+        $('#examList').append('<thead><tr><th>考试编号</th><th>考试名称</th><th>考题编号</th><th>考试耗时</th><th>学生成绩</th></tr></thead>');
+        $.ajax({
+            url: '{:U("/Home/Teacher/getExamList")}',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                teacher_id: '{:I("session.teacher")["teacher_id"]}'
+            }
+        })
+            .done(function(response) {
+                $('#examList').DataTable( {
+                    "bProcessing": true,
+                    "bDestroy": true,
+                    "sPaginationType" : "full_numbers",
+                    "oLanguage" : {
+                          "sLengthMenu": "每页显示 _MENU_ 条记录",
+                          "sZeroRecords": "抱歉， 没有找到",
+                          "sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+                          "sInfoEmpty": "没有数据",
+                          "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+                          "sZeroRecords": "没有检索到数据",
+                           "sSearch": "搜索: &nbsp",
+                          "oPaginate": {
+                            "sFirst": "首页",
+                            "sPrevious": "前一页",
+                            "sNext": "后一页",
+                            "sLast": "尾页"
+                          }
+                      },
+                    data: response,
+                    columns: [
+                        { data: 'exam_id' },
+                        { data: 'name' },
+                        { data: 'question_id' },
+                        { data: 'spend_time' },
+                        { data: 'info' }
+                    ],
+                    columnDefs: [
+                        <!-- { -->
+                        <!--     "targets": 0, -->
+                        <!--     "visible":false -->
+                        <!-- }, -->
+                        {
+                            "targets": -1,
+                            "data": null,
+                            "render": function (data, type, row, table) {
+                                return '<button type="button" class="am-btn am-btn-primary" onclick="getExamInfo(' + data + ')">' +  "学生得分" + '</button>  <button type="button" class="am-btn am-btn-success" onclick="showExamChart(' + data + ')">' +  "统计图表" + '</button>';
+                            }
+                        }
+                    ]
+                } );
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
+            });
+    });
+
+    var myChart = echarts.init(document.getElementById('examInfoContent'));
+
+    function getExamInfo(exam_id){
+        $.ajax({
+            url: '{:U("/Home/Teacher/getExamInfo")}',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                exam_id: exam_id
+            }
+        })
+            .done(function(response){
+                $('#examInfoTable').DataTable({
+                    "bProcessing": true,
+                    "bDestroy": true,
+                    "sPaginationType" : "full_numbers",
+                    "oLanguage" : {
+                          "sLengthMenu": "每页显示 _MENU_ 条记录",
+                          "sZeroRecords": "抱歉， 没有找到",
+                          "sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+                          "sInfoEmpty": "没有数据",
+                          "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+                          "sZeroRecords": "没有检索到数据",
+                           "sSearch": "搜索: &nbsp",
+                          "oPaginate": {
+                            "sFirst": "首页",
+                            "sPrevious": "前一页",
+                            "sNext": "后一页",
+                            "sLast": "尾页"
+                          }
+                      },
+                    bDestroy: true,
+                    paging: false,
+                    searching: false,
+                    data: response,
+                    columns:[
+                        { data: 'student_id' },
+                        { data: 'student_name' },
+                        { data: 'score' }
+                    ]
+                });
+                $("#my-modal").modal("open");
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
+            });
+    }
+    function showExamChart(exam_id){
+        $.ajax({
+            url: '{:U("/Home/Teacher/getExamInfo")}',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                exam_id: exam_id
+            }
+        })
+            .done(function(response){
+                var ydata = response.map(function(d) {
+                    return parseInt(d.score);
+                });
+                var xdata = response.map(function(d) {
+                    return d.student_name;
+                });
+                myChart.clear();
+                option = {
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'category',
+                            boundaryGap : false,
+                            data : xdata
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value',
+                            axisLabel : {
+                                formatter: '{value}分'
+                            }
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'分数',
+                            type:'line',
+                            data: ydata,
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最高分'},
+                                    {type : 'min', name: '最低分'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均分'}
+                                ]
+                            }
+                        }
+                    ]
+                };
+                myChart.setOption(option);
+                $("#my-chart-modal").modal("open");
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
+            });
+    }
+</script>
