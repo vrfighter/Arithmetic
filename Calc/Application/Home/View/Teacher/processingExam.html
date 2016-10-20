@@ -1,0 +1,115 @@
+<include file="Index/teacherheader"/>
+<style>
+    .list-title {
+      text-align: center;
+      padding: 20px;
+    }
+    #examList {
+      text-align: center;
+    }
+    th {
+      text-align: center;
+    }
+</style>
+    <if condition="session('teacher')">
+    <else />
+        <script type="text/javascript">
+            window.location.href = '{:U("/Home/Teacher/login")}';
+        </script>
+    </if>
+    <div class="list-title">
+        <h1>考试信息</h1>
+    </div>
+    <div class="am-container">
+        <div class="am-g am-u-sm-centered">
+            <table id="examList" class="am-table am-table-bordered">
+            </table>
+        </div>
+    </div>
+<include file="Index/footer"/>
+
+<script type="text/javascript">
+    $(document).ready(function($) {
+        $('#examList').append('<thead><tr><th>考试编号</th><th>考试名称</th><th>考题编号</th><th>考试耗时</th><th>操作</th></tr></thead>');
+        $.ajax({
+            url: '{:U("/Home/Teacher/getProcessingExamList")}',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                teacher_id: '{:I("session.teacher")["teacher_id"]}'
+            }
+        })
+            .done(function(response) {
+                $('#examList').DataTable({
+                    "bProcessing": true,
+                    "bDestroy": true,
+                    "sPaginationType" : "full_numbers",
+                    "oLanguage" : {
+                          "sLengthMenu": "每页显示 _MENU_ 条记录",
+                          "sZeroRecords": "抱歉， 没有找到",
+                          "sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+                          "sInfoEmpty": "没有数据",
+                          "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+                          "sZeroRecords": "没有检索到数据",
+                           "sSearch": "搜索: &nbsp",
+                          "oPaginate": {
+                            "sFirst": "首页",
+                            "sPrevious": "前一页",
+                            "sNext": "后一页",
+                            "sLast": "尾页"
+                          }
+                      },
+                    data: response,
+                    columns: [
+                        { data: 'exam_id' },
+                        { data: 'name' },
+                        { data: 'question_id' },
+                        { data: 'spend_time' },
+                        { data: 'info' }
+                    ],
+                    columnDefs: [
+                        <!-- { -->
+                        <!--     "targets": 0, -->
+                        <!--     "visible":false -->
+                        <!-- }, -->
+                        {
+                            "targets": -1,
+                            "data": null,
+                            "render": function (data, type, row, table) {
+                                return '<button type="button" class="am-btn am-btn-primary" onclick="finishExam(' + data + ')">' +  "结束" + '</button>';
+                            }
+                        }
+                    ]
+                } );
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
+            });
+    });
+
+    function finishExam(exam_id){
+        $.ajax({
+            url: '{:U("/Home/Teacher/endProcessingExam")}',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                exam_id: exam_id
+            }
+        })
+            .done(function(response){
+                if(response.status == 'success'){
+                    alert(response.message);
+                    location.reload();
+                }
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
+            });
+    }
+</script>

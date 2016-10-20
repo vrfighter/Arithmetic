@@ -1,0 +1,67 @@
+<include file="Index/Teacherheader"/>
+<style>
+    h1 {
+      text-align: center;
+      padding: 60px 0;
+    }
+    #file-up-div {
+      text-align: center;
+    }
+    #submit-btn {
+      text-align: center;
+    }
+</style>
+<div class="am-g am-u-sm-6 am-u-sm-centered">
+    <h1>选择试题文件</h1>
+    <form class="am-form" method="post" enctype="multipart/form-data"  action='{:U("Home/Upload/uploadexcel")}'>
+        <fieldset>
+            <div class="am-form-group">
+                <label for="question_name">试题名称</label>
+                <input type="text" id="question_name" name="question_name">
+            </div><br>
+            <div id="file-up-div" class="am-form-group am-form-file am-u-sm-centered">
+                <button type="button" class="am-btn am-btn-danger">
+                    <i class="am-icon-cloud-upload"></i> 选择要上传的文件</button>
+                <input name="file" type="file">&nbsp;&nbsp;
+            </div>
+            <div id="submit-btn" class="am-form-group">
+                <input class="am-btn am-btn-primary" type="submit" value="<-确认上传->">
+            </div><br>
+        </fieldset>
+    </form>
+<div>
+<script type="text/javascript">
+    $(document).ready(function($) {
+        $("#add-btn").on('click', function(argument) {
+            var jjnum = $("#jjnum").val();
+            var ccnum = $("#ccnum").val();
+            var hhnum = $("#hhnum").val();
+            var question_name = $("#name").val();
+            $.ajax({
+                url: '{:U("/Home/Index/saveQuestion")}',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    teacher_id: '{:I("session.teacher")["teacher_id"]}',
+                    question_name: question_name,
+                    jjnum: jjnum,
+                    ccnum: ccnum,
+                    hhnum: hhnum
+                }
+            })
+                .done(function(response) {
+                    if(response.status == 'success'){
+                        alert('出题完成');
+                        window.location.href = '{:U("/Home/Teacher/questionList")}';
+                    }
+                })
+                .fail(function() {
+                    console.log("error");
+                })
+                .always(function() {
+                    console.log("complete");
+                });
+        });
+    });
+</script>
+<include file="Index/footer"/>
