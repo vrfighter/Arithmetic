@@ -1,0 +1,69 @@
+<include file="Index/Teacherheader"/>
+<style>
+    h1 {
+      text-align: center;
+      padding: 60px 0;
+    }
+</style>
+<div class="am-g am-u-sm-6 am-u-sm-centered">
+    <h1>出题选项</h1>
+    <div class="am-input-group">
+        <span class="am-input-group-label">试题名称</span>
+        <input id="name" type="text" class="am-form-field">
+    </div>
+    <br>
+    <div class="am-input-group">
+        <span class="am-input-group-label">加减运算</span>
+        <input id="jjnum" type="number" class="am-form-field">
+        <span class="am-input-group-label">道</span>
+    </div>
+    <br>
+    <div class="am-input-group">
+        <span class="am-input-group-label">乘除运算</span>
+        <input id="ccnum" type="number" class="am-form-field">
+        <span class="am-input-group-label">道</span>
+    </div>
+    <br>
+    <div class="am-input-group">
+        <span class="am-input-group-label">混合运算</span>
+        <input id="hhnum" type="number" class="am-form-field">
+        <span class="am-input-group-label">道</span>
+    </div>
+    <br>
+    <button id="add-btn" class="am-btn am-btn-primary am-u-sm-centered">确定出题</button>
+<div>
+<script type="text/javascript">
+    $(document).ready(function($) {
+        $("#add-btn").on('click', function(argument) {
+            var jjnum = $("#jjnum").val();
+            var ccnum = $("#ccnum").val();
+            var hhnum = $("#hhnum").val();
+            var question_name = $("#name").val();
+            $.ajax({
+                url: '{:U("/Home/Index/saveQuestion")}',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    teacher_id: '{:I("session.teacher")["teacher_id"]}',
+                    question_name: question_name,
+                    jjnum: jjnum,
+                    ccnum: ccnum,
+                    hhnum: hhnum
+                }
+            })
+                .done(function(response) {
+                    if(response.status == 'success'){
+                        alert('出题完成');
+                        window.location.href = '{:U("/Home/Teacher/questionList")}';
+                    }
+                })
+                .fail(function() {
+                    console.log("error");
+                })
+                .always(function() {
+                    console.log("complete");
+                });
+        });
+    });
+</script>
+<include file="Index/footer"/>
