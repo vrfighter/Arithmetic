@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>小学生四则运算网站</title>
+	<css href="__PUBLIC__/assets/css/jquery.fullPage.css"/>
+	<css href="__PUBLIC__/assets/css/lanrenzhijia.css"/>
+	<js href="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"/>
+	<js href="http://libs.baidu.com/jqueryui/1.8.22/jquery-ui.min.js"/>
+	<js href="__PUBLIC__/assets/js/jquery.fullPage.min.js"/>
+<script>
+$(function(){
+	if($.browser.msie && $.browser.version < 10){
+		$('body').addClass('ltie10');
+	}
+	$.fn.fullpage({
+		verticalCentered: false,
+		anchors: ['page1', 'page2', 'page3', 'page4', 'page5', 'page6'],
+		navigation: true,
+		navigationTooltips: ['首页', '学生练习', '学生考试', '智能错题', '教师功能', '马上体验']
+	});
+});
+</script>
+</head>
+<body>
+
+<div class="section section1">
+	<div class="bg"><img src="__PUBLIC__/assets/images/index/section1.jpg" alt=""></div>
+	<div class="star"></div>
+	<div class="bg12"></div>
+	<div class="bg13"></div>
+<div class="mail">
+		<a class="mail-163" href="{:U("Home/Student/index")}">学生主页</a>
+
+	<a class="mail-yeah" href="{:U("Home/Teacher/index")}">教师主页</a>
+	</div>
+	<div class="hgroup">
+		<h1>四则运算学习系统</a></h1>
+		<h2>进步，不止所见。</h2>
+	</div>
+	<p class="p11">小学生四则运算学习系统&mdash;&mdash;将网络与学习结合，海量题型，提升自我。人性化的系统设计<br>方便教师、学生、家长三种角色，帮助孩子学习进步，从此再也不用担心小学运算基础啦！<br></p>
+</div>
+
+<div class="section section2">
+	<div class="bg"><img src="__PUBLIC__/assets/images/index/section2.jpg" alt=""></div>
+	<div class="bg21"></div>
+	<div class="bg22"></div>
+	<div class="bg23"></div>
+	<strong>[ 学习·简 ]</strong>
+	<h3>随时练习，尽享进步之喜</h3>
+	<p class="p1">学生随时可以登录系统进行四则运算练习，让学习更简单、更便捷。让小学生们爱上学习！</p>
+</div>
+
+<div class="section section3">
+	<div class="bg"><img src="__PUBLIC__/assets/images/index/section3.jpg" alt=""></div>
+	<div class="bg31"></div>
+	<div class="bg32"></div>
+	<div class="bg33"></div>
+	<strong>[ 考试系统设计 ]</strong>
+	<h3>随机组题，全方面考察运算能力</h3>
+	<p class="p3">系统为学生设计在线考试环节，通过随机组题，附有计时功能，考察运算能力。</p>
+</div>
+
+<div class="section section4">
+	<div class="bg"><img src="__PUBLIC__/assets/images/index/section4.jpg" alt=""></div>
+	<div class="bg41"></div>
+	<div class="bg42"></div>
+	<div class="bg43"></div>
+	<strong>[ 智能错题管理 ]</strong>
+	<h3>错题在手，打遍天下无敌手</h3>
+	<p class="p1">设置查看错题功能，正确使用错题使得学习效果百倍。</p>
+</div>
+
+<div class="section section5">
+	<div class="bg"><img src="__PUBLIC__/assets/images/index/section5.jpg" alt=""></div>
+	<strong>[ 教学·创 ]</strong>
+	<h3>灵活机变，全面为你而生</h3>
+	<div class="bg51">
+		<h4>查看名单</h4>
+		<p>班级学生信息一览无余，更方便管理学生学习。</p>
+	</div>
+	<div class="bg52">
+		<h4>随机出题</h4>
+		<p>网站不止局限于四则运算，教师可以出题让学生作答</p>
+	</div>
+	<div class="bg53">
+		<h4>教师评语</h4>
+		<p>教师对学生进行评语，更方便与同学线上互动交流</p>
+	</div>
+	<div class="bg54">
+		<h4>查看考试结果</h4>
+		<p>学生在其系统进行考试后，教师可以查看学生答题情况。</p>
+	</div>
+</div>
+
+<div class="section section10">
+	<div class="bg"><img src="__PUBLIC__/assets/images/index/section10.jpg" alt=""></div>
+	<div class="bg101"></div>
+	<div class="bg102"></div>
+	<div class="bg103"></div>
+<a class="go" href="{:U("Home/Student/index")}">学生主页</a>
+<a class="go2" href="{:U("Home/Teacher/index")}">教师主页</a>
+	<p class="copyright">
+		
+		<span>小学生四则运算网站 © 邓琨、白文俊、张星星、韩婧 </span>
+	</p>
+</div>
+</body>
+</html>
