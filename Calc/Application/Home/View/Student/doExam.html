@@ -137,7 +137,7 @@
                 },2000);
             }
             return (
-                    <div>
+                    <div style={{textAlign: 'center'}}>
                         <h3 className="am-panel-title" style={{textAlign: 'center',padding: '10px 0'}}>考试剩余时间{this.state.time_left}秒</h3>
                         <table className="am-table">
                             <tbody>
@@ -146,7 +146,7 @@
                             })}
                             </tbody>
                         </table>
-                        <button className="am-btn am-btm-success am-u-centered" onClick={this.submitExam}>交卷</button>
+                        <button className="btn btn-info btn-primary btn-block" onClick={this.submitExam}>交卷</button>
                     </div>
             );
         }
