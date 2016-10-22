@@ -84,7 +84,7 @@
                                 "targets": -1,
                                 "data": null,
                                 "render": function (data, type, row, table) {
-                                    return '<a class="btn btn-info btn-primary" onclick="toDoExam(' + data + ')">' +  "参加考试" + '</a>';
+                                    return '<a class="btn btn-info btn-primary" onclick="toDoExam('+row["exam_id"]+', '+row["spend_time"]+')">' +  "参加考试" + '</a>';
                                 }
                             },
                             {
