@@ -21,8 +21,9 @@
     <div class="list-title">
         <h1>学生信息列表</h1>
     </div>
-    <div class="am-container">
-        <div class="am-g am-u-sm-centered">
+    <div class="am-container" style="text-align: center;">
+        <img src="__PUBLIC__/assets/images/stu/finish.jpg" alt="Logo" style="float: left;width: 10%;"/>
+        <div class="am-g am-u-sm-centered"  style="float: left;width: 90%">
             <table id="studentList" class="am-table am-table-bordered">
                 <thead>
                     <tr>
@@ -56,12 +57,11 @@
         <div class="am-modal-dialog">
             <div class="am-modal-hd">通知</div>
             <div class="am-modal-bd">
-                通知内容
                 <textarea id="content" class="am-modal-prompt-input"></textarea>
             </div>
             <div class="am-modal-footer">
-                <span class="am-modal-btn" onclick="submit()">确认</span>
-                <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+                <button class="btn btn-info btn-primary" onclick="submit()">确认</button>　　
+                <button class="btn btn-info btn-primary" onclick="cancel()">取消</button>
             </div>
         </div>
     </div>
@@ -77,6 +77,28 @@
 <include file="Index/footer"/>
 
 <script type="text/javascript">
+    
+    function cancel() {
+        var $modal = $('#letter-modal');
+        $modal.modal('close');
+    }
+
+    function submit(){
+        $.ajax({
+            url: '{:U("/Home/Teacher/addLetter")}',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                student_id: student_id,
+                content:$('#content').val()
+            }
+        })
+                .done(function(data){
+                    var $modal = $('#letter-modal');
+                    $modal.modal('close');
+                })
+    }
+    
     $(document).ready(function($) {
 
         $.ajax({
@@ -123,7 +145,7 @@
                             "data": null,
                             sortable:false,
                             "render": function (data, type, row, table) {
-                                return '<button type="button" class="am-btn am-btn-primary" onclick="getStudentInfo(' + data + ')">' +  "查看学生" + '</button>  <button type="button" class="am-btn am-btn-secondary" onclick="getStudentChart(' + data + ')">' +  "统计图表" + '</button>  <button type="button" class="am-btn am-btn-success" onclick="letter(' + data + ')">' +  "通知" + '</button>';
+                                return '<a class="btn btn-primary" onclick="getStudentInfo(' + data + ')">' +  "查看学生" + '</a> <a class="btn btn-primary" onclick="letter(' + data + ')">' +  "通知" + '</a>';
                             }
                         }
                     ]
@@ -270,19 +292,5 @@
         $("#letter-modal").modal('open');
     }
 
-    function submit(){
-        $.ajax({
-            url: '{:U("/Home/Teacher/addLetter")}',
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                student_id: student_id,
-                content:$('#content').val()
-            }
-        })
-        .done(function(data){
-            //$("#letter-modal").modal('close');
-            //location.reload();
-        })
-    }
+
 </script>
