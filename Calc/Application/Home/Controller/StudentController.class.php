@@ -69,7 +69,7 @@ class StudentController extends Controller {
         foreach($stu_exam_list as $stu_exam){
             $exam_id = $stu_exam['exam_id'];
             $Dao2 = M('exam');
-            $r = $Dao2->where("exam_id=$exam_id AND status='finished'")->select();
+            $r = $Dao2->where("exam_id=$exam_id")->select();
             if(empty($r))
                 continue;
             $r = $r[0];
@@ -87,7 +87,24 @@ class StudentController extends Controller {
 
     public function getProcessingExam(){
         $student_id= I('param.student_id');
-        $Dao1 = M('stu_exam');
+        $Exam = M('exam');
+        $examList = $Exam->where("status='processing'")->select();
+        $data = array();
+        foreach ($examList as $processingExam){
+            $exam_id = $processingExam['exam_id'];
+            $Dao2 = M('stu_exam');
+            $stu_exam_list = $Dao2->where("student_id=$student_id AND exam_id=$exam_id")->select();
+            if(empty($stu_exam_list)){
+                $d = array();
+                $d['exam_id'] = $processingExam['exam_id'];
+                $d['name'] = $processingExam['name'];
+                $d['spend_time'] = $processingExam['spend_time'];
+                $d['info'] = $processingExam['exam_id'] . ',' . $processingExam['spend_time'];
+                array_push($data,$d);
+            }
+        }
+        echo json_encode($data);
+       /* $Dao1 = M('stu_exam');
         $stu_exam_list = $Dao1->where("student_id=$student_id")->select();
         $data = array();
         foreach($stu_exam_list as $stu_exam){
@@ -103,9 +120,7 @@ class StudentController extends Controller {
             $d['spend_time'] = $r['spend_time'];
             $d['info'] = $r['exam_id'] . ',' . $r['spend_time'];
             array_push($data,$d);
-        }
-
-        echo json_encode($data);
+        }*/
     }
 
     public function toDoExam(){
@@ -120,17 +135,16 @@ class StudentController extends Controller {
     }
 
     public function submitExam(){
-        $exam_id = I('param.exam_id');
-        $student_id = I('param.student_id');
-        $spend_time = I('param.spend_time');
-        $score = I('param.score');
         $Dao = M('stu_exam');
-        $Dao->score = $score;
-        $Dao->time_spent = $spend_time;
-        $result['status'] = $Dao->where("exam_id=$exam_id AND student_id=$student_id")->save();
+        $stu_exam['exam_id'] = I('param.exam_id');
+        $stu_exam['student_id'] = I('param.student_id');
+        $stu_exam['student_name'] = session('student')['name'];
+        $stu_exam['time_spent'] = I('param.spend_time');
+        $stu_exam['score'] = I('param.score');
+        $Dao = M('stu_exam');
+        $result['status'] = $Dao->add($stu_exam);
         $result['message'] = 'submit exam-score';
-        $result['spend_time'] = $spend_time;
-
+        $result['spend_time'] = I('param.spend_time');
         echo json_encode($result);
     }
 
