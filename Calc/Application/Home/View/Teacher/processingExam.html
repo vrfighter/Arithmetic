@@ -76,7 +76,7 @@
                             "targets": -1,
                             "data": null,
                             "render": function (data, type, row, table) {
-                                return '<button type="button" class="am-btn am-btn-primary" onclick="finishExam(' + data + ')">' +  "结束" + '</button>';
+                                return '<button type="button" class="btn btn-primary" onclick="finishExam(' + data + ')">' +  "结束" + '</button>';
                             }
                         }
                     ]
@@ -91,25 +91,29 @@
     });
 
     function finishExam(exam_id){
-        $.ajax({
-            url: '{:U("/Home/Teacher/endProcessingExam")}',
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                exam_id: exam_id
-            }
-        })
-            .done(function(response){
-                if(response.status == 'success'){
-                    alert(response.message);
-                    location.reload();
+        if(confirm("确定结束考试？"))
+        {
+            $.ajax({
+                url: '{:U("/Home/Teacher/endProcessingExam")}',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    exam_id: exam_id
                 }
             })
-            .fail(function() {
-                console.log("error");
-            })
-            .always(function() {
-                console.log("complete");
-            });
+                    .done(function(response){
+                        if(response.status == 'success'){
+                            location.reload();
+                        }
+                    })
+                    .fail(function() {
+                        console.log("error");
+                    })
+                    .always(function() {
+                        console.log("complete");
+                    });
+        }
+
+
     }
 </script>

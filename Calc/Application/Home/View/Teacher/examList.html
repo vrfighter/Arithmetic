@@ -20,12 +20,24 @@
     <div class="list-title">
         <h1>考试信息</h1>
     </div>
-    <div class="am-container">
-        <div class="am-g am-u-sm-centered">
-            <table id="examList" class="am-table am-table-bordered">
-            </table>
-        </div>
+    <!--<div class="am-container">-->
+        <!--<div class="am-g am-u-sm-centered">-->
+            <!--<table id="examList" class="am-table am-table-bordered">-->
+            <!--</table>-->
+        <!--</div>-->
+    <!--</div>-->
+
+
+
+<div class="am-container" style="text-align: center;">
+    <img src="__PUBLIC__/assets/images/stu/finish.jpg" alt="Logo" style="float: left;width: 10%;"/>
+    <div class="am-g am-u-sm-centered"  style="float: left;width: 90%">
+        <table id="examList" class="am-table am-table-bordered">
+        </table>
     </div>
+</div>
+
+
     <div class="am-modal am-modal-no-btn" tabindex="-1" id="my-modal">
         <div class="am-modal-dialog">
             <div class="am-modal-hd">本次考试得分情况
@@ -44,6 +56,8 @@
             </div>
         </div>
     </div>
+
+
     <div class="am-modal am-modal-no-btn" tabindex="-1" id="my-chart-modal">
         <div class="am-modal-dialog">
             <div class="am-modal-hd">本次考试得分情况
@@ -101,7 +115,8 @@
                             "targets": -1,
                             "data": null,
                             "render": function (data, type, row, table) {
-                                return '<button type="button" class="am-btn am-btn-primary" onclick="getExamInfo(' + data + ')">' +  "学生得分" + '</button>  <button type="button" class="am-btn am-btn-success" onclick="showExamChart(' + data + ')">' +  "统计图表" + '</button>';
+                                return '<button type="button" class="btn btn-primary" onclick="getExamInfo(' + data + ')">' +  "学生得分" + '</button>';
+//                                <button type="button" class="btn btn-success" onclick="showExamChart(' + data + ')">' +  "统计图表" + '</button>'
                             }
                         }
                     ]

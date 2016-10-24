@@ -5,33 +5,32 @@
       padding: 60px 0;
     }
 </style>
-<div class="am-g am-u-sm-6 am-u-sm-centered">
+<div class="am-g am-u-sm-4 am-u-sm-centered form-horizontal">
     <h1>出题选项</h1>
-    <div class="am-input-group">
-        <span class="am-input-group-label">试题名称</span>
-        <input id="name" type="text" class="am-form-field">
+    <div class="am-input-group ">
+        <h5 class="control-label">试题名称：　　　　</h5>
+        <input id="name" type="text" class="control-label am-form-field">
     </div>
     <br>
     <div class="am-input-group">
-        <span class="am-input-group-label">加减运算</span>
-        <input id="jjnum" type="number" class="am-form-field">
-        <span class="am-input-group-label">道</span>
+        <h5 class="control-label">加减运算(道)：　　　　</h5>
+        <input id="jjnum" type="number" class="control-label am-form-field">
     </div>
     <br>
     <div class="am-input-group">
-        <span class="am-input-group-label">乘除运算</span>
-        <input id="ccnum" type="number" class="am-form-field">
-        <span class="am-input-group-label">道</span>
+        <h5 class="control-label">乘除运算(道)：　　　　</h5>
+        <input id="ccnum" type="number" class="control-label am-form-field">
     </div>
     <br>
     <div class="am-input-group">
-        <span class="am-input-group-label">混合运算</span>
-        <input id="hhnum" type="number" class="am-form-field">
-        <span class="am-input-group-label">道</span>
+        <h5  class="control-label">混合运算(道)：　　　　</h5>
+        <input id="hhnum" type="number" class="control-label am-form-field">
     </div>
-    <br>
-    <button id="add-btn" class="am-btn am-btn-primary am-u-sm-centered">确定出题</button>
-<div>
+    <br/>
+    <button id="add-btn" class="btn btn-primary col-sm-offset-4 col-sm-3">确定出题</button>
+    <br/>
+    <br/>
+    <div>
 <script type="text/javascript">
     $(document).ready(function($) {
         $("#add-btn").on('click', function(argument) {
